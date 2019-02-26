@@ -1,25 +1,46 @@
 const { performance } = require('perf_hooks');
 
-function fib(n, store) {
-    let v = 0;
+function fibWithDp(index, store) {
+    let result = 0;
 
-    if (store[n]) {
-        return store[n];
+    if (store[index]) {
+        return store[index];
     }
 
-    if (n === 0) {
-        v = 0;
-    } else if (n === 1) {
-        v = 1;
+    if (index === 0) {
+        result = 0;
+    } else if (index === 1) {
+        result = 1;
     } else {
-        v = fib(n - 1, store) + fib(n - 2, store);
+        result = fibWithDp(index - 1, store) + fibWithDp(index - 2, store);
     }
-    store[n] = v;
-    return v;
+    
+    store[index] = result;
+
+    return result;
 }
 
+function fibWithoutDP(index) {
+    let result = 0;
+    if (index === 0) {
+        result = 0;
+    } else if (index === 1) {
+        result = 1;
+    } else {
+        result = fibWithoutDP(index - 1) + fibWithoutDP(index - 2);
+    }
+    return result;
+}
+
+var n = 40;
 var t1 = performance.now();
-var p = fib(1000, {});
+var number1 = fibWithDp(n, {});
 var t2 = performance.now();
-console.log('fib: ', p);
-console.log('time taken : ', (t2 - t1).toFixed(3), ' ms.');
+console.log(`${n}th fib number : ${number1}`);
+console.log(`time taken to compute with dp: ${(t2 - t1).toFixed(3)} ms.`);
+
+var t3 = performance.now();
+var number2 = fibWithoutDP(n);
+var t4 = performance.now();
+console.log(`${n}th fib number : ${number2}`);
+console.log(`time taken to compute w/o dp: ${(t4 - t3).toFixed(3)} ms.`);
